@@ -11,6 +11,7 @@ public class myHashTable<K extends Comparable<K>,T extends Comparable<T>> {
     }
 
     public int hashCode(K key) {
+        //key를 String으로 변환하고 각 자리의 ascii code 합을 구한 뒤, 그 값을 100으로 나눈 나머지 반환
         String keyString = key.toString();
         int hCode = keyString.charAt(0);
         for(int i=1;i<6;i++){
@@ -20,26 +21,22 @@ public class myHashTable<K extends Comparable<K>,T extends Comparable<T>> {
     }
 
     public void tableInsert(K key, T value){
+        //hash table 내부 주어진 key에 해당하는 AVLTree에 value 삽입
         int hCode = hashCode(key);
-        if(hashSet[hCode] == null) {
+        if(hashSet[hCode] == null)
             hashSet[hCode] = new AVLTree<>(new AVLNode<K, T>(key));
-        }
         hashSet[hCode].setRoot(hashSet[hCode].insertNode(hashSet[hCode].getRoot(),key,value));
-        //hashSet[hCode].printPre(hashSet[hCode].getRoot());
-        //System.out.println("Inserted Key: "+ key +", Value: "+ value + ", Hash:" + hCode);
     }
 
     public void printValues(int index){
-        if(hashSet[index] != null) {
-            AVLTree<K, T> tree = hashSet[index];
-            tree.printPre(tree.getRoot());
-            System.out.println();
-        }
+        //특정 위치에 있는 AVLTree의 value를 preorder traversal 방식으로 출력
+        if(hashSet[index] != null)
+            System.out.println(hashSet[index].printPre(hashSet[index].getRoot()));
         else
             System.out.println("EMPTY");
     }
 
-    public AVLNode<K,T> search(K key){
+    public AVLNode<K,T> search(K key){  //key에 해당하는 AVLTree를 검색
         int hCode = hashCode(key);
         AVLTree<K,T> hTree = hashSet[hCode];
         if(hTree == null)
@@ -51,4 +48,5 @@ public class myHashTable<K extends Comparable<K>,T extends Comparable<T>> {
     public void clear(){
         hashSet = (AVLTree<K,T>[]) Array.newInstance(AVLTree.class, size);
     }
+    // hash table에 저장된 값 모두 삭제
 }
